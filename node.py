@@ -1,5 +1,5 @@
 class Node:
-    def __init__(self, data):
+    def __init__(self, data=None):
         self.data = data
         self.left = None
         self.right = None
@@ -53,6 +53,14 @@ class Node:
         if self.left:
             self.left.printDescending()
 
+    # Wypisanie drzewa
+    def printTree(self, level=0):
+        print(f'{level * "    "} {self.data}')
+        if self.left:
+            self.left.printTree(level + 1)
+        if self.right:
+            self.right.printTree(level + 1)
+
     # Wypisanie elementów drzewa w porządku pre-order
     def printPreOrder(self):
         print(self.data, end=" ")
@@ -85,4 +93,58 @@ class Node:
                 self.left.printLevel(level, currLevel + 1)
             if self.right:
                 self.right.printLevel(level, currLevel + 1)
+
+    # Usunięcie węzła z drzewa
+    def deleteNode(self, data):
+        if self is None:
+            return self
+        if data < self.data:
+            self.left = self.left.deleteNode(data)
+            return self
+        if data > self.data:
+            self.right = self.right.deleteNode(data)
+            return self
+        if self.right is None:
+            return self.left
+        if self.left is None:
+            return self.right
+        min_larger_node = self.right
+        while min_larger_node.left:
+            min_larger_node = min_larger_node.left
+        self.data = min_larger_node.data
+        self.right = self.right.deleteNode(min_larger_node.data)
+        return self
+
+    def deleteSubtree(self, data):
+        parent = None
+        current = self
+        while current and current.data != data:
+            parent = current
+            if data < current.data:
+                current = current.left
+            else:
+                current = current.right
+        if not current:
+            return
+        if parent:
+            if parent.left == current:
+                parent.left = None
+            else:
+                parent.right = None
+        else:
+            self.data = None
+            self.left = None
+            self.right = None
+        self.deleteSubtreeUtil(current.left)
+        self.deleteSubtreeUtil(current.right)
+
+    def deleteSubtreeUtil(self, node):
+        if not node:
+            return
+        self.deleteSubtreeUtil(node.left)
+        self.deleteSubtreeUtil(node.right)
+        node.data = None
+        node.left = None
+        node.right = None
+
 

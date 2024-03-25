@@ -1,5 +1,7 @@
 from node import Node
+import balance
 import utils
+import timeit
 
 
 def createRandomBST(array):
@@ -9,21 +11,59 @@ def createRandomBST(array):
     return temp
 
 
+"""
 def createAVL(array):
-    # TODO: Funkcja na konstruowanie drzewa AVL metodą przeszukiwania binarnego
-    return 1
+    center = (len(array) - 1) // 2
+    root = Node(array[center])
+    if len(array[:center]) >= 1:
+        root.left = createAVL(array[:center])
+    if len(array[center + 1:]) >= 1:
+        root.right = createAVL(array[center + 1:])
+    return root
+"""
+
+
+def createAVL(arr):
+    if not arr:
+        return None
+    mid = (len(arr) - 1) // 2
+    root = Node(arr[mid])
+    root.left = createAVL(arr[:mid])
+    root.right = createAVL(arr[mid + 1:])
+    return root
 
 
 loop = True
 while loop:
 
-    # Debug
-    T = [8, 2, 5, 14, 1, 10, 12, 13, 6, 9]
-    tree = createRandomBST(T)
+    T = []
+    tree = None
+
+    # Zapytanie o wprowadzenie danych
+    utils.menu("Jak chcesz wprowadzić dane? ", ["Z klawiatury", "Generator danych losowych"])
+    inputType = int(input("Podaj typ wprowadzenia danych: "))
+
+    if inputType == 1:
+        print("Podaj ciąg (1 2 3 ...): ", end="")
+        T = list(map(int, input().split()))
+    elif inputType == 2:
+        n = int(input("Podaj długość ciągu: "))
+        T = utils.generate(n)
 
     # Zapytanie o typ drzewa
     utils.menu("Wybierz typ drzewa z listy poniżej", ["Drzewo AVL", "Losowe drzewo BST"])
     treeType = int(input("Podaj typ drzewa: "))
+
+    if treeType == 1:
+        T.sort()
+        tree = createAVL(T)
+    elif treeType == 2:
+        tree = createRandomBST(T)
+
+    print("---------------")
+    print("Twoje drzewo: ")
+    tree.printTree()
+    print()
 
     # Zapytanie o operację
     utils.menu("Wybierz operację z listy poniżej", [
@@ -46,17 +86,27 @@ while loop:
         print(f'Klucz {key} znajduje się na poziomie {level}.')
         print(f'Elementy na poziomie {level}: ', end="")
         tree.printLevel(level)
-        # TODO: Usunięcie tego węzła
+        tree.deleteNode(key)
+        print()
+        tree.printTree()
     elif operationType == 3:
         tree.printDescending()
     elif operationType == 4:
         key = int(input("Podaj klucz: "))
         node = tree.getNodeByData(key)
         print(f'Wysokość wybranego poddrzewa = {node.getHeight()}')
-        # TODO: Usunięcie tego poddrzewa metodą post-order
-    elif operationType == 5:
-        # TODO: Równoważenie drzewa przez rotacje
+        tree.deleteSubtree(key)
         print()
+        tree.printTree()
+    elif operationType == 5:
+        tree.printPreOrder()
+        print()
+        t0 = timeit.default_timer()
+        tree = balance.balanceBST(tree)
+        t1 = timeit.default_timer()
+        tree.printPreOrder()
+        print()
+        print('Czas sortowania: {:.6f}s'.format(t1 - t0))
 
     # Zapytanie o kontynuowanie
     print()
