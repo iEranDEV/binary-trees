@@ -2,36 +2,9 @@ from node import Node
 import balance
 import utils
 import timeit
+import sys
 
-
-def createRandomBST(array):
-    temp = Node(array[0])
-    for i in range(1, len(array)):
-        temp.insert(array[i])
-    return temp
-
-
-"""
-def createAVL(array):
-    center = (len(array) - 1) // 2
-    root = Node(array[center])
-    if len(array[:center]) >= 1:
-        root.left = createAVL(array[:center])
-    if len(array[center + 1:]) >= 1:
-        root.right = createAVL(array[center + 1:])
-    return root
-"""
-
-
-def createAVL(arr):
-    if not arr:
-        return None
-    mid = (len(arr) - 1) // 2
-    root = Node(arr[mid])
-    root.left = createAVL(arr[:mid])
-    root.right = createAVL(arr[mid + 1:])
-    return root
-
+sys.setrecursionlimit(100000)
 
 loop = True
 while loop:
@@ -54,16 +27,22 @@ while loop:
     utils.menu("Wybierz typ drzewa z listy poniżej", ["Drzewo AVL", "Losowe drzewo BST"])
     treeType = int(input("Podaj typ drzewa: "))
 
+    create_time = 0
+
     if treeType == 1:
         T.sort()
-        tree = createAVL(T)
+        tree = utils.createAVL(T)
     elif treeType == 2:
-        tree = createRandomBST(T)
+        t0 = timeit.default_timer()
+        tree = utils.createRandomBST(T)
+        t1 = timeit.default_timer()
+        create_time = t1 - t0
 
     print("---------------")
     print("Twoje drzewo: ")
     tree.printTree()
     print()
+    print('Czas tworzenia: {:.6f}s'.format(create_time))
 
     # Zapytanie o operację
     utils.menu("Wybierz operację z listy poniżej", [

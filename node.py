@@ -30,19 +30,23 @@ class Node:
         return None
 
     # Szukanie najmniejszej wartości w drzewie
-    def findMin(self):
+    def findMin(self, write=True):
         if self.left:
-            print(f'{self.data} -> ', end="")
-            return self.left.findMin()
-        print(self.data)
+            if write:
+                print(f'{self.data} -> ', end="")
+            return self.left.findMin(write)
+        if write:
+            print(self.data)
         return self.data
 
     # Szukanie największej wartości w drzewie
-    def findMax(self):
+    def findMax(self, write=True):
         if self.right:
-            print(f'{self.data} -> ', end="")
-            return self.right.findMax()
-        print(self.data)
+            if write:
+                print(f'{self.data} -> ', end="")
+            return self.right.findMax(write)
+        if write:
+            print(self.data)
         return self.data
 
     # Wypisanie wszystkich elementów drzewa w porzadku malejącym
@@ -65,9 +69,9 @@ class Node:
     def printPreOrder(self):
         print(self.data, end=" ")
         if self.left:
-            self.left.printDescending()
+            self.left.printPreOrder()
         if self.right:
-            self.right.printDescending()
+            self.right.printPreOrder()
 
     # Zwraca wysokość drzewa
     def getHeight(self):
