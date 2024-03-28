@@ -2,11 +2,10 @@ import balance
 import utils
 import timeit
 import sys
-import math
 
 sys.setrecursionlimit(10**9)
 
-sizes = [25, 100, 250, 500, 1000, 2500, 5000, 10000]
+sizes = [25, 100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000]
 
 arrays = {}
 trees = {
@@ -19,7 +18,7 @@ ile_ciagow = 1
 for size in sizes:
     arrays[size] = []
     for i in range(ile_ciagow):
-        arrays[size].append(utils.generate_decreasing_sequence(size))
+        arrays[size].append(utils.generate_decreasing_sequence(size, 150000))
 
 # Generowanie drzew
 print("GENEROWANIE DRZEW")

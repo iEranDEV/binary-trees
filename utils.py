@@ -17,8 +17,8 @@ def generate(size):
     return values
 
 
-def generate_decreasing_sequence(size):
-    temp = random.sample(range(1, size * 10), size)
+def generate_decreasing_sequence(size, k):
+    temp = random.sample(range(1, k), size)
     temp.sort()
     return temp[::-1]
 
@@ -26,7 +26,7 @@ def generate_decreasing_sequence(size):
 def createRandomBST(array):
     temp = Node(array[0])
     for i in range(1, len(array)):
-        temp.insert(i)
+        temp.insert(array[i])
     return temp
 
 

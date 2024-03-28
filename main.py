@@ -21,7 +21,8 @@ while loop:
         T = list(map(int, input().split()))
     elif inputType == 2:
         n = int(input("Podaj długość ciągu: "))
-        T = utils.generate(n)
+        T = utils.generate_decreasing_sequence(n)
+        print(T)
 
     # Zapytanie o typ drzewa
     utils.menu("Wybierz typ drzewa z listy poniżej", ["Drzewo AVL", "Losowe drzewo BST"])
@@ -58,7 +59,10 @@ while loop:
         print("MAX: ", end="")
         tree.findMax()
         print("MIN: ", end="")
+        t0 = timeit.default_timer()
         tree.findMin()
+        t1 = timeit.default_timer()
+        print('time =  {:.6f}s'.format(t1 - t0))
     elif operationType == 2:
         key = int(input("Podaj klucz: "))
         level = tree.findLevel(key)
